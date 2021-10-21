@@ -28,17 +28,17 @@ data = dict(
     train=dict(
         type=dataset_type,
         data_prefix='../mmdetection/data/TBX11K/imgs/',
-        ann_file='../mmdetection/data/TBX11K/lists/TBX11K_train_imagenet.txt',
+        ann_file='../mmdetection/data/TBX11K/lists/all_trainval_imagenet.txt',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
         data_prefix='../mmdetection/data/TBX11K/imgs/',
-        ann_file='../mmdetection/data/TBX11K/lists/TBX11K_val_imagenet.txt',
+        ann_file='../mmdetection/data/TBX11K/lists/all_val_imagenet.txt',
         pipeline=test_pipeline),
     test=dict(
         # replace `data/val` with `data/test` for standard test
         type=dataset_type,
         data_prefix='../mmdetection/data/TBX11K/imgs/',
-        ann_file='../mmdetection/data/TBX11K/lists/TBX11K_val_imagenet.txt',
+        ann_file='../mmdetection/data/TBX11K/lists/all_test_imagenet.txt',
         pipeline=test_pipeline))
 evaluation = dict(interval=1, metric='accuracy')
