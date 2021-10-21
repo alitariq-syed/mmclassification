@@ -104,7 +104,7 @@ optimizer_config = dict(grad_clip=None)
 lr_config = dict(policy='step', step=[30, 60, 90])
 runner = dict(type='EpochBasedRunner', max_epochs=100)
 checkpoint_config = dict(interval=10, max_keep_ckpts=2)
-log_config = dict(interval=207, hooks=[dict(type='TextLoggerHook')])
+log_config = dict(interval=281, hooks=[dict(type='TextLoggerHook')])
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 load_from = 'https://download.openmmlab.com/mmclassification/v0/resnet/resnet50_8xb32_in1k_20210831-ea4938fc.pth'
