@@ -11,7 +11,7 @@ import numpy as np
 import json
 
 
-base_dir = './tutorial_exps/'
+base_dir = './tutorial_exps_C1/'
 
 f = open(base_dir+'output_results.json')
 results_dict = json.load(f)
