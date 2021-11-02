@@ -10,7 +10,11 @@ img_norm_cfg = dict(
 
 train_pipeline = [
     dict(type='LoadImageFromFile'),
-    dict(type='RandomResizedCrop', size=224),
+    dict(
+        type='RandomResizedCrop',
+        size=224,
+        backend='pillow',
+        interpolation='bicubic'),
     dict(type='RandomFlip', flip_prob=0.5, direction='horizontal'),
     dict(
         type='RandAugment',
@@ -18,29 +22,31 @@ train_pipeline = [
         num_policies=2,
         total_level=10,
         magnitude_level=7,
-        magnitude_std=0.5),
-        
-    #dict(
-    #    type='RandomErasing',
-    #    erase_prob=0.4,
-    #    mode='rand',
-    #    min_area_ratio=0.02,
-    #    max_area_ratio=1 / 3	,
-    #    fill_color=img_norm_cfg['mean'][::-1],
-    #    fill_std=img_norm_cfg['std'][::-1]),            
+        magnitude_std=0.5,
+        hparams=dict(
+            pad_val=[round(x) for x in img_norm_cfg['mean'][::-1]],
+            interpolation='bicubic')),
+    dict(
+        type='RandomErasing',
+        erase_prob=0.25,
+        mode='rand',
+        min_area_ratio=0.02,
+        max_area_ratio=1 / 3,
+        fill_color=img_norm_cfg['mean'][::-1],
+        fill_std=img_norm_cfg['std'][::-1]),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='ImageToTensor', keys=['img']),
     dict(type='ToTensor', keys=['gt_label']),
-    dict(type='Collect', keys=['img', 'gt_label']),
-        
-   #add repeated augmentation, stochastic depth, label smoothing, mixed precision
-   # deal with img normalization
-   #largest possible batch size (128)
-   #lamb alternative optimizer (Adam?)
+    dict(type='Collect', keys=['img', 'gt_label'])
 ]
+
 test_pipeline = [
     dict(type='LoadImageFromFile'),
-    dict(type='Resize', size=(256, -1)),
+    dict(
+        type='Resize',
+        size=(256, -1),
+        backend='pillow',
+        interpolation='bicubic'),
     dict(type='CenterCrop', crop_size=224),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='ImageToTensor', keys=['img']),
@@ -65,4 +71,4 @@ data = dict(
         data_prefix='../mmdetection/data/TBX11K/imgs/',
         ann_file='../mmdetection/data/TBX11K/lists/all_test_imagenet.txt',
         pipeline=test_pipeline))
-evaluation = dict(interval=1, metric='accuracy')
+evaluation = dict(interval=10, metric='accuracy')
