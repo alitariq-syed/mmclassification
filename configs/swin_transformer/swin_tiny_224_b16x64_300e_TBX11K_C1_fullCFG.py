@@ -167,7 +167,7 @@ test_pipeline = [
     dict(type='Collect', keys=['img'])
 ]
 data = dict(
-    samples_per_gpu=128,
+    samples_per_gpu=96,
     workers_per_gpu=1,
     train=dict(
         type='ImageNet',
@@ -333,11 +333,11 @@ lr_config = dict(
     min_lr_ratio=0.01,
     warmup='linear',
     warmup_ratio=0.001,
-    warmup_iters=350.625,
+    warmup_iters=467.5,
     warmup_by_epoch=False)
 runner = dict(type='EpochBasedRunner', max_epochs=300)
 checkpoint_config = dict(interval=10, max_keep_ckpts=2)
-log_config = dict(interval=71, hooks=[dict(type='TextLoggerHook')])
+log_config = dict(interval=94, hooks=[dict(type='TextLoggerHook')])
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 load_from = 'https://download.openmmlab.com/mmclassification/v0/swin-transformer/convert/swin_tiny_patch4_window7_224-160bb0a5.pth'
