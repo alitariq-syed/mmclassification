@@ -50,7 +50,7 @@ def init_model(config, checkpoint=None, device='cuda:0', options=None):
     return model
 
 
-def inference_model(model, img):
+def inference_model(model, img,cfg):
     """Inference image(s) with the classifier.
 
     Args:
@@ -61,7 +61,7 @@ def inference_model(model, img):
         result (dict): The classification results that contains
             `class_name`, `pred_label` and `pred_score`.
     """
-    cfg = model.cfg
+#    cfg = model.cfg
     device = next(model.parameters()).device  # model device
     # build the data pipeline
     if isinstance(img, str):
