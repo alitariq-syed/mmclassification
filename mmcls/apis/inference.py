@@ -113,7 +113,7 @@ def show_result_pyplot(model,
     model.show_result(
         img,
         result,
-        show=True,
+        show=False,
         fig_size=fig_size,
         win_name=title,
         wait_time=wait_time)
