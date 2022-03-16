@@ -12,7 +12,7 @@ train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
-        size=224,
+        size=512,
         backend='pillow',
         interpolation='bicubic'),
     dict(type='RandomFlip', flip_prob=0.5, direction='horizontal'),
@@ -44,16 +44,16 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='Resize',
-        size=(256, -1),
+        size=(512, -1),
         backend='pillow',
         interpolation='bicubic'),
-    dict(type='CenterCrop', crop_size=224),
+    dict(type='CenterCrop', crop_size=512),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='ImageToTensor', keys=['img']),
     dict(type='Collect', keys=['img'])
 ]
 data = dict(
-    samples_per_gpu=96,
+    samples_per_gpu=8,
     workers_per_gpu=1,
     train=dict(
         type=dataset_type,
