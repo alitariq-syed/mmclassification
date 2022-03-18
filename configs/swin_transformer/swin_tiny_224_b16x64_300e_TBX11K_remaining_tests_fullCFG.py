@@ -339,7 +339,7 @@ lr_config = dict(
     warmup_ratio=0.001,
     warmup_iters=467.5,
     warmup_by_epoch=False)
-runner = dict(type='EpochBasedRunner', max_epochs=300)
+runner = dict(type='EpochBasedRunner', max_epochs=600)
 checkpoint_config = dict(interval=10, max_keep_ckpts=2)
 log_config = dict(interval=94, hooks=[dict(type='TextLoggerHook')])
 dist_params = dict(backend='nccl')
@@ -350,4 +350,4 @@ workflow = [('train', 1)]
 work_dir = './tutorial_swin_C1'
 seed = 0
 gpu_ids = range(0, 1)
-total_epochs = 300
+total_epochs = 600
