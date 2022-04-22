@@ -3,10 +3,9 @@ model = dict(
     backbone=dict(
         type='SwinTransformer',
         arch='tiny',
-        img_size=512,
+        img_size=224,
         drop_rate=0.0,
-        drop_path_rate=0.2,
-        stage_cfgs=dict(block_cfgs=dict(window_size=16))),
+        drop_path_rate=0.2),
     neck=dict(type='GlobalAveragePooling'),
     head=dict(
         type='MultiLabelLinearClsHead',
@@ -74,7 +73,7 @@ train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='RandomResizedCrop',
-        size=512,
+        size=224,
         backend='pillow',
         interpolation='bicubic'),
     dict(type='RandomFlip', flip_prob=0.5, direction='horizontal'),
@@ -159,10 +158,10 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='Resize',
-        size=(512, -1),
+        size=(256, -1),
         backend='pillow',
         interpolation='bicubic'),
-    dict(type='CenterCrop', crop_size=512),
+    dict(type='CenterCrop', crop_size=224),
     dict(
         type='Normalize',
         mean=[123.675, 116.28, 103.53],
@@ -172,7 +171,7 @@ test_pipeline = [
     dict(type='Collect', keys=['img'])
 ]
 data = dict(
-    samples_per_gpu=8,
+    samples_per_gpu=96,
     workers_per_gpu=1,
     train=dict(
         type='ImageNet',
@@ -182,7 +181,7 @@ data = dict(
             dict(type='LoadImageFromFile'),
             dict(
                 type='RandomResizedCrop',
-                size=512,
+                size=224,
                 backend='pillow',
                 interpolation='bicubic'),
             dict(type='RandomFlip', flip_prob=0.5, direction='horizontal'),
@@ -277,10 +276,10 @@ data = dict(
             dict(type='LoadImageFromFile'),
             dict(
                 type='Resize',
-                size=(512, -1),
+                size=(256, -1),
                 backend='pillow',
                 interpolation='bicubic'),
-            dict(type='CenterCrop', crop_size=512),
+            dict(type='CenterCrop', crop_size=224),
             dict(
                 type='Normalize',
                 mean=[123.675, 116.28, 103.53],
@@ -293,15 +292,15 @@ data = dict(
     test=dict(
         type='ImageNet',
         data_prefix='../mmdetection/data/TBX11K/imgs/',
-        ann_file='../mmdetection/data/TBX11K/lists/all_val_imagenet.txt',
+        ann_file='../mmdetection/data/TBX11K/lists/all_test_imagenet.txt',
         pipeline=[
             dict(type='LoadImageFromFile'),
             dict(
                 type='Resize',
-                size=(512, -1),
+                size=(256, -1),
                 backend='pillow',
                 interpolation='bicubic'),
-            dict(type='CenterCrop', crop_size=512),
+            dict(type='CenterCrop', crop_size=224),
             dict(
                 type='Normalize',
                 mean=[123.675, 116.28, 103.53],
@@ -338,15 +337,15 @@ lr_config = dict(
     min_lr_ratio=0.01,
     warmup='linear',
     warmup_ratio=0.001,
-    warmup_iters=5610.0,
+    warmup_iters=467.5,
     warmup_by_epoch=False)
 runner = dict(type='EpochBasedRunner', max_epochs=300)
 checkpoint_config = dict(interval=10, max_keep_ckpts=2)
-log_config = dict(interval=1122, hooks=[dict(type='TextLoggerHook')])
+log_config = dict(interval=94, hooks=[dict(type='TextLoggerHook')])
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-load_from = 'https://download.openmmlab.com/mmclassification/v0/swin-transformer/convert/swin_tiny_patch4_window7_224-160bb0a5.pth'
-resume_from = None
+load_from = None
+resume_from = './tutorial_swin_C1/epoch_170.pth'
 workflow = [('train', 1)]
 work_dir = './tutorial_swin_C1'
 seed = 0
