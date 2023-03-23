@@ -90,4 +90,4 @@ if __name__ == '__main__':
     with app.app_context():
         current_app.classification_model = "my classification model"
         current_app.segmentation_model = initialize_mmseg_model()
-    app.run(debug = True)
+    app.run(debug = True, use_debugger=False, use_reloader=False)
