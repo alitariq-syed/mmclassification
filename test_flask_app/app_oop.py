@@ -83,7 +83,7 @@ class MyApp(Flask):
         result = infer_mmseg_model(current_app.segmentation_model,img_loaded)
         end = time.time()-start
         print("---------prediction made in: ", end)
-        return jsonify({'message': f'Hello, world!; prediction made by mmseg model'})
+        return jsonify({'message': f'Hello, world!; prediction made by mmseg model in '+ str(end) + ' seconds'})
 
 if __name__ == '__main__':
     app = MyApp(__name__)
