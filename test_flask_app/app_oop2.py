@@ -1,6 +1,23 @@
 from flask import Flask, current_app, request
 import time
 
+import logging
+
+# 1. Create logger object
+logger = logging.getLogger('myproject')
+
+# 2. Set logging level
+logger.setLevel(logging.INFO)
+
+# 3. Configure handler(s)
+console_handler = logging.StreamHandler()
+logger.addHandler(console_handler)
+
+# 4. Log messages throughout the code
+logger.info('This is an information message')
+logger.warning('This is a warning message')
+logger.error('This is an error message')
+
 # app = Flask(__name__)
 
 # class MyFlaskApp(object):
