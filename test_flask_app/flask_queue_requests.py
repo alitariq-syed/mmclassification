@@ -46,6 +46,8 @@ logger.error('This is an error message')
 
 from flask import Flask, current_app, request
 import time
+from celery import Celery
+
 max_concurrent_requests = 3
 active_requests = 0
 
@@ -64,16 +66,32 @@ class FlaskAppWrapper(object):
     def run(self, **kwargs):
         self.app.run(**kwargs)
 
+
 if __name__ == "__main__":
 
     flask_app = Flask(__name__)
+    #Configure the redis server
+    flask_app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+    flask_app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+    # celery = Celery(flask_app.name, broker='amqp://guest@localhost//')
+    celery = Celery(flask_app.name, broker=flask_app.config['CELERY_BROKER_URL'])
+    celery.conf.update(flask_app.config)
+
+    @celery.task
+    def process_denied_request(request):
+        # log the denied request to a file or database
+        with open('denied_requests.log', 'a') as f:
+            f.write(request.url + '\n')
+            
 
     @flask_app.before_request
     def before_request_func():
         global active_requests
         current_app.start_time = time.perf_counter()
-        # if active_requests >= max_concurrent_requests:
-        #     return "Too many requests", 503
+        if active_requests >= max_concurrent_requests:
+            process_denied_request.delay(request)
+            return "", 202 # accepted but not processed
+            # return "Too many requests", 503
         active_requests +=1
         print("New request recieved. Active requests: ", active_requests)
 
@@ -90,7 +108,7 @@ if __name__ == "__main__":
 
     app = FlaskAppWrapper(flask_app)
     app.add_endpoint('/', 'hello_world', app.hello_world)
-    app.app.run(debug=True, threaded=True, processes=1)
+    app.app.run(debug=True)
 
 
 #====================================================================================================
