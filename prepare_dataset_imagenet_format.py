@@ -8,7 +8,7 @@ import os
 import numpy as np
 import json
 
-target_data_path = "E:/SwipBox/Dataset/"
+target_data_path = "E:/Dataset/"
 subset='test'
 path = target_data_path+subset
 print(os.listdir(path))
